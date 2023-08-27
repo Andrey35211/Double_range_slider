@@ -1,0 +1,139 @@
+#slider {
+    display: flex;
+    flex-direction: row;
+    width: 90%;
+}
+
+.v-switch-active-color {
+    color: #74a7cd ;
+    cursor: pointer;
+}
+
+.v-switch-active {
+    color: #0167b3;
+    cursor: pointer;
+}
+
+.bar-left {
+    padding-right: 119px;
+}
+
+.bar-right {
+    width: 80%;
+}
+
+.multi-range-slider .label {
+    color: #999;
+}
+
+.multi-range-slider .bar-inner {
+    background-color: #5CADEA;
+    box-shadow: none;
+    height: 6px;
+    border: none;
+
+}
+
+.multi-range-slider .bar-right {
+    box-shadow: none;
+    height: 8px;
+}
+
+.multi-range-slider .bar-left {
+    box-shadow: none;
+    height: 8px;
+    padding: 0px;
+}
+
+.multi-range-slider .thumb::before {
+    box-shadow: none;
+    border: solid 5px #5CADEA;
+    width: 10px;
+    height: 10px;
+    margin: -7px
+}
+
+.multi-range-slider .ruler, .multi-range-slider .sub-ruler {
+    display: none;
+}
+
+.multi-range-slider {
+    background-color: #e8e8e8;
+    box-shadow: none;
+    border: 0px;
+}
+
+.multi-range-slider-black .thumb .caption * {
+    background-color: #FFFFFF;
+    color: #0167B3;
+}
+
+.multi-range-slider .thumb .caption * {
+    background-color: #FFFFFF;
+    color: #0167B3;
+    box-shadow: 0px 5px 15px rgba(14, 88, 143, 0.20);
+    line-height: normal;
+    white-space: normal;
+    min-width: 70px;
+    max-width: 112px;
+    height: 59px;
+    font-size: 18px;
+    font-family: Raleway;
+    padding-top: 15px;
+}
+
+.multi-range-slider .caption {
+    display: flex;
+    bottom: 60px;
+}
+
+.multi-range-slider .thumb .caption .max-caption {
+    bottom: -135px;
+    padding-top: 0px;
+    padding-bottom: 7px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+}
+
+.MultiRangeSliderContainer {
+    width: 100%;
+    margin-top: 20px;
+}
+
+@media (max-width: 819px) {
+    #slider {
+        width: 100%;
+        flex-direction: column;
+        align-items: center;
+    }
+    .bar-right {
+        width: 86%;
+        padding-bottom: 10px;
+    }
+    .bar-left {
+        padding-right: 0px;
+        padding-bottom: 33px;
+    }
+
+    .multi-range-slider .label {
+        font-size: 11px;
+    }
+
+    .multi-range-slider .thumb .caption * {
+        font-size: 16px;
+        height: 55px;
+    }
+
+    .multi-range-slider .thumb .caption .max-caption {
+        bottom: -130px;
+        padding-bottom: 8px;
+        margin-right: 5px;
+    }
+
+    .multi-range-slider .thumb .caption .min-caption {
+        bottom: -32px;
+        padding-top: 10px;
+    }
+}
+
