@@ -119,7 +119,7 @@ export default {
       for (let i = yearMin; i <= yearMax; i++) {
         years.push(String(i));
       }
-
+      // если в массиве пришло более 3 лет, то вставить все года и слово "месяцы" между ними
       if (years.length > 3) {
         for (let i = 0; i < years.length; i++) {
           const year = years[i];
@@ -129,7 +129,7 @@ export default {
           }
         }
       }
-
+      // вставить месяцы между годами, если в массиве пришло 3 года или менее 3 лет
       if (years.length <= 3) {
         for (let i = 0; i < years.length; i++) {
           const year = years[i];
