@@ -1,9 +1,13 @@
-<template >
+<template>
 
   <div id="slider">
     <div class="bar-left">
-      <p @click="showFirstComponent" :class="{ 'v-switch-active': firstComponentVisible, 'v-switch-active-color': !firstComponentVisible }" >Все года</p>
-      <p @click="showSecondComponent" :class="{ 'v-switch-active': !firstComponentVisible, 'v-switch-active-color': firstComponentVisible }">Месяцы</p>
+      <p @click="showFirstComponent"
+         :class="{ 'v-switch-active': firstComponentVisible, 'v-switch-active-color': !firstComponentVisible }">Все
+        года</p>
+      <p @click="showSecondComponent"
+         :class="{ 'v-switch-active': !firstComponentVisible, 'v-switch-active-color': firstComponentVisible }">
+        Месяцы</p>
     </div>
 
     <div class="bar-right">
@@ -11,25 +15,25 @@
         <MultiRangeSlider
             :min="0"
             :max="91"
-            :minValue="dayBarMinValue"
-            :maxValue="dayBarMaxValue"
+            :minValue="yearMinValue"
+            :maxValue="yearMaxValue"
             :labels="getAllYearNames"
-            :min-caption="dayMinCaption"
-            :max-caption="dayMaxCaption"
+            :min-caption="dateMinCaption"
+            :max-caption="dateMaxCaption"
             :step="1"
             @input="updateDayValues"
         />
       </div>
 
-      <div class="MultiRangeSliderContainer" v-else >
+      <div class="MultiRangeSliderContainerMonth" v-else>
         <MultiRangeSlider
             :min="0"
-            :max="91"
-            :labels="getElementsBetween"
-            :minValue="barMinValue"
-            :maxValue="barMaxValue"
-            :min-caption="dayMinCaption"
-            :max-caption="dayMaxCaption"
+            :max="26"
+            :labels="getElementsBetweenForMonth"
+            :minValue="monthMinValue"
+            :maxValue="monthMaxValue"
+            :min-caption="monthMinCaption"
+            :max-caption="monthMaxCaption"
             @input="updateWeekValues"
         />
       </div>
@@ -39,7 +43,6 @@
 </template>
 
 
-
 <script>
 
 import MultiRangeSlider from "multi-range-slider-vue";
@@ -47,146 +50,178 @@ import "./style.css"
 import "./../../node_modules/multi-range-slider-vue/MultiRangeSliderBlack.css";
 import "./../../node_modules/multi-range-slider-vue/MultiRangeSliderBarOnly.css";
 
+
 export default {
   el: "slider",
   name: "App",
-  components: { MultiRangeSlider },
+  components: {MultiRangeSlider},
 
   data() {
     return {
-      barMinValue: 0,
-      barMaxValue: 91,
-      dayBarMinValue: 0,
-      dayBarMaxValue: 91,
-      wBarMinValue: 1,
-      wBarMaxValue: 8,
-      hBarMinValue: 120,
-      hBarMaxValue: 600,
-      sBarMinValue: 0,
-      sBarMaxValue: 100,
-      oBarMinValue: 10,
-      oBarMaxValue: 90,
+      monthMinValue: 0,
+      // 3 года + все месяцы между ними
+      monthMaxValue: 26,
+      yearMinValue: 0,
+      // 8 годов + все месяцы между ними
+      yearMaxValue: 91,
       firstComponentVisible: true,
+      StartYear: 2014,
+      EndYear: 2021,
     };
   },
-  mounted() {
-    const element = document.querySelector('.max-caption');
-    element.classList.add('speech')
-    const element1 = document.querySelector('.min-caption');
-    element1.classList.add('speech')
-  },
-
   methods: {
     updateWeekValues(e) {
-      this.wBarMinValue = e.minValue;
-      this.wBarMaxValue = e.maxValue;
+      this.monthMinValue = e.minValue;
+      this.monthMaxValue = e.maxValue;
     },
     updateDayValues(e) {
-      this.dayBarMinValue = e.minValue;
-      this.dayBarMaxValue = e.maxValue;
+      this.yearMinValue = e.minValue;
+      this.yearMaxValue = e.maxValue;
     },
-    showFirstComponent: function() {
-    this.firstComponentVisible = true;
+    showFirstComponent: function () {
+      this.firstComponentVisible = true;
     },
-    showSecondComponent: function() {
-    this.firstComponentVisible = false;
+    showSecondComponent: function () {
+      this.firstComponentVisible = false;
     },
   },
-
-
   computed: {
-
     monthNames() {
       return ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"];
     },
-
-    yearNames() {
-      return [
-        "2014",
-        "2021"
-      ];
-    },
     getAllYearNames() {
-      let years = [];
-      for (let i = 2014; i <= 2021; i++) {
+      const years = [];
+      for (let i = this.StartYear; i <= this.EndYear; i++) {
         years.push(String(i));
       }
       return years;
     },
     shortMonthNames() {
-      let months = this.monthNames;
-      let shortenedMonths = [];
+      const months = this.monthNames;
+      const shortenedMonths = [];
 
       for (let i = 0; i < months.length; i++) {
-        let month = months[i];
-        let shortenedMonth = month.substring(0, 3).toLowerCase();
+        const month = months[i];
+        const shortenedMonth = month.substring(0, 3).toLowerCase();
         shortenedMonths.push(shortenedMonth);
+        shortenedMonths.join(' ').split(' ')
       }
       return shortenedMonths;
     },
-    getElementsBetween() {
-      let yearMin = this.dayMinCaption.split(" ")[0];
-      let yearMax = this.dayMaxCaption.split(" ")[1];
-      console.log(yearMax)
-      let elements = [];
-      let isBetween = false;
+    getElementsBetweenForMonth() {
 
-      for (let i = 0; i < this.insertMonthIntoArrayYear.length; i++) {
-        let year = this.insertMonthIntoArrayYear[i];
-        if (year === yearMin) {
-          isBetween = true;
-        }
-        if (isBetween) {
+      const yearMin = this.dateMinCaption.split(" ")[1];
+      const yearMax = this.dateMaxCaption.split(" ")[1];
+      const elements = [];
+      const years = []
+      let isBetween = false;
+      const months = this.shortMonthNames;
+      for (let i = yearMin; i <= yearMax; i++) {
+        years.push(String(i));
+      }
+
+      if (years.length > 3) {
+        for (let i = 0; i < years.length; i++) {
+          const year = years[i];
           elements.push(year);
+          if (!(year === yearMax)) {
+            elements.push("месяцы")
+          }
         }
-        if (year === yearMax) {
-          break;
+      }
+
+      if (years.length <= 3) {
+        for (let i = 0; i < years.length; i++) {
+          const year = years[i];
+
+          if (year === yearMin) {
+            isBetween = true;
+          }
+          if (isBetween) {
+
+            elements.push(year);
+
+            if (!(year === yearMax)) {
+              for (let j = 0; j < months.length; j++) {
+                elements.push(months[j]);
+              }
+            }
+          }
+          if (year === yearMax) {
+            break
+          }
         }
+      }
+
+      if (yearMin === yearMax) {
+
+        for (let j = 0; j < months.length; j++) {
+          elements.push(months[j]);
+        }
+
+        elements.push(yearMin);
       }
       return elements;
     },
 
-    dayMinCaption() {
-      let year = this.duplicateArrayElementsForYears[this.dayBarMinValue]
-      let month = this.insertEmptyArraysForMonth[this.dayBarMinValue]
-      return year + " " + month
+    dateMinCaption() {
+
+      const year = this.duplicateArrayElementsForYears[this.yearMinValue]
+      const month = this.insertEmptyArraysForMonth[this.yearMinValue]
+      return month + " " + year
     },
-    dayMaxCaption() {
-      let year = this.duplicateArrayElementsForYears[this.dayBarMaxValue]
-      let month = this.insertEmptyArraysForMonth[this.dayBarMaxValue]
+    dateMaxCaption() {
+      const year = this.duplicateArrayElementsForYears[this.yearMaxValue]
+      const month = this.insertEmptyArraysForMonth[this.yearMaxValue]
+      return month + " " + year
+    },
+    monthMinCaption() {
+      const year = this.duplicateYearForMonthCaption[this.monthMinValue]
+      const month = this.insertEmptyArraysForMonth[this.monthMinValue]
+      return month + " " + year
+    },
+    monthMaxCaption() {
+      const year = this.duplicateYearForMonthCaption[this.monthMaxValue]
+      const month = this.insertEmptyArraysForMonth[this.monthMaxValue]
       return month + " " + year
     },
     duplicateArrayElementsForYears() {
       const duplicatedArray = [];
+      const months = this.shortMonthNames;
       this.getAllYearNames.forEach((element) => {
-        for (let i = 0; i < 13; i++) {
+        for (let i = 0; i < months.length + 1; i++) {
           duplicatedArray.push(element);
         }
       });
+
       return duplicatedArray;
     },
     insertEmptyArraysForMonth() {
+      const years = this.getAllYearNames;
       const newArray = [];
-      for (let i = 0; i < 7; i++) {
+      for (let i = 0; i < years.length - 1; i++) {
         newArray.push([]);
         newArray.push(...this.monthNames);
       }
       newArray.push([]);
       return newArray;
     },
-    insertMonthIntoArrayYear() {
-      let years = this.getAllYearNames;
-      let months = this.shortMonthNames;
-      let newArray = [];
-        for (let i = 0; i < years.length; i++) {
-          newArray.push(years[i]);
-          if (i < years.length - 1) {
-            for (let j = 0; j < months.length; j++) {
-              newArray.push(months[j]);
-            }
-          }
+    duplicateYearForMonthCaption() {
+      const yearMin = this.dateMinCaption.split(" ")[1];
+      const yearMax = this.dateMaxCaption.split(" ")[1];
+      const duplicatedArray = [];
+      const years = []
+      for (let i = yearMin; i <= yearMax; i++) {
+        years.push(String(i));
+      }
+      const months = this.shortMonthNames;
+      years.forEach((element) => {
+        for (let i = 0; i < months.length ; i++) {
+          duplicatedArray.push(element);
         }
-      return newArray;
+      });
+      console.log(duplicatedArray)
+      return duplicatedArray;
     },
   }
 }
